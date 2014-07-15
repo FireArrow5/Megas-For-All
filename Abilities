@@ -1,4 +1,4 @@
-pexports.BattleAbilities = {
+exports.BattleAbilities = {
 	},
 	"corrosion": {
 		desc: "This Pokemon has the ability to hit Steel-type Pokemon with Poison-type moves. Effectiveness of these moves takes into account the Steel-type Pokemon's other weaknesses and resistances.",
