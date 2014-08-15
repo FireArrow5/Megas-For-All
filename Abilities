@@ -217,3 +217,194 @@ exports.BattleAbilities = {
 		rating: 3,
 		num: 202
 	},
+	"capacitance": {
+		desc: "This Pokemon's contact moves have a 30% chance of paralyzing the target.",
+		shortDesc: "Contact moves have a 30% chance of paralyzing.",
+		onModifyMove: function (move) {
+			if (!move || !move.isContact) return;
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			move.secondaries.push({
+				chance: 30,
+				status: 'par'
+			});
+		},
+		id: "capacitance",
+		name: "Capacitance",
+		rating: 2,
+		num: 203
+	},
+	"comboartist": {
+                desc: "This Pokemon does 50% more damage to targets with lowered Speed.",
+                shortDesc: "Does 1.5x damage to slowed targets.",
+                onBasePower: function (basePower, attacker, defender, move) {
+			if (target.boosts[6] < 0) {
+				return this.chainModify(1.5);
+			}
+		},
+                id: "comboartist",
+                name: "Combo Artist",
+                rating: 3,
+                num: 204
+     	},
+        "dimensionalwarp": {
+                desc: "When it enters the field. this Pokemon starts the Trick Room effect, or cancels it if it is already in effect.",
+                shortDesc: "Uses Trick Room upon field entry.",
+                
+                // copied effect from trick room move
+                // think it has to be included here but not sure
+                // there might be a way to reference the move's effect
+                
+                effect: {
+			duration: 5,
+			onStart: function (target, source) {
+				this.add('-fieldstart', 'move: Trick Room', '[of] ' + source);
+				this.getStatCallback = function (stat, statName) {
+					// If stat is speed and does not overflow (Trick Room Glitch) return negative speed.
+					if (statName === 'spe' && stat <= 1809) return -stat;
+					return stat;
+				};
+			},
+			onResidualOrder: 23,
+			onEnd: function () {
+				this.add('-fieldend', 'move: Trick Room');
+				this.getStatCallback = null;
+			}
+		},
+                
+                onStart: function (source) {
+			if (this.pseudoWeather['trickroom']) {
+				this.removePseudoWeather('trickroom', source, effect, '[of] ' + source);
+			} else {
+				this.addPseudoWeather('trickroom', source, effect, '[of] ' + source);
+			}
+		},
+                id: "dimensionalwarp",
+                name: "Dimensional Warp",
+                rating: 4,
+                num: 205
+     	},
+        "dreamer": {
+        desc: "This Pokemon's Special Attack is increased by 50% when it is asleep, and it can still use moves while asleep.",
+                shortDesc: "While asleep, can use moves and has 1.5x Special Attack.",
+                onModifySpA: function (spa, pokemon) {
+			if (pokemon.status === 'slp') {
+				return this.chainModify(1.5);
+			}
+                },
+                //implement move choice in the sleep status itself
+                id: "dreamer",
+                name: "Dreamer",
+                rating: 3,
+                num: 206
+      	},
+      	"energycrystal": {
+        	desc: "This Pokemon takes 3/4 damage from special moves. When it is hit by a special move, its Special Attack is boosted by one stage.",
+        	shortDesc: "Takes 3/4 damage from special moves and raises Special Attack by 1 when hit by a special move.",
+        	onSourceModifyDamage: function (damage, source, target, move) {
+			if (move.category === 'special') {
+                        	this.boost({spa:1});
+                        	return this.chainModify(0.75);
+			}
+		},
+        	id: "energycrystal",
+        	name: "Energy Crystal",
+        	rating: 3,
+        	num: 207
+      	},
+      	"fireabsorb": {
+		desc: "This Pokemon is immune to Fire moves. If hit by a Fire move, it recovers 25% of its max HP.",
+		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Fire moves; Fire immunity.",
+		onTryHit: function (target, source, move) {
+			if (target !== source && move.type === 'Fire') {
+				if (!this.heal(target.maxhp / 4)) {
+					this.add('-immune', target, '[msg]');
+				}
+				return null;
+			}
+		},
+		id: "fireabsorb",
+		name: "Fire Absorb",
+		rating: 3,
+		num: 208
+      	},
+      	"gritpower": {
+                desc: "Boosts Attack and Special Attack by 50% when afflicted with a status condition. Ignores the Attack drop from Burn.",
+                shortDesc: "Has 1.5x Attk and SAttk when statused, ignores Burn's Attk drop.",
+                onModifyAtk: function (atk, pokemon) {
+			if (pokemon.status) {
+				return this.chainModify(1.5);
+			}
+		},
+		//implement ignoring burn's attack drop in the burn status, like guts
+                onModifySpA: function (spa, pokemon) {
+                        if (pokemon.status) {
+				return this.chainModify(1.5);
+			}
+                },
+                id: "gritpower",
+                name: "Grit Power",
+                rating: 3,
+                num: 209
+      	},
+      	"grounded": {
+                desc: "While user is on the field, all Pokemon have their Ground immunities ignored.",
+                shortDesc: "All immunities to Ground are ignored while user is active.",
+                onAnyModifyPokemon: function(pokemon) {
+                    pokemon.negateImmunity['Ground'] = true;
+                },
+                id: "grounded",
+                name: "Grounded",
+                rating: 3,
+                num: 210
+      	},
+      	"heatseek": {
+                desc: "This Pokemon's Fire moves cannot miss.",
+                shortDesc: "This Pokemon's Fire moves cannot miss.",
+                onModifyMove: function(move) {
+                    if (move.type === 'Fire') {
+                        move.accuracy = true;
+                    }
+                },
+                id: "heatseek",
+                name: "Heat Seek",
+                rating: 3,
+                num: 210
+      	},
+      	"ignate": {
+		desc: "Turns all of this Pokemon's Normal-typed attacks into Fire-typed and deal 1.3x damage. Does not affect Hidden Power.",
+		shortDesc: "This Pokemon's Normal moves become Fire-type and do 1.3x damage.",
+		onModifyMove: function (move, pokemon) {
+			if (move.type === 'Normal' && move.id !== 'hiddenpower') {
+				move.type = 'Fire';
+				pokemon.addVolatile('ignate');
+			}
+		},
+		effect: {
+			duration: 1,
+			onBasePowerPriority: 8,
+			onBasePower: function (basePower, pokemon, target, move) {
+				return this.chainModify([0x14CD, 0x1000]);
+			}
+		},
+		id: "ignate",
+		name: "Ignate",
+		rating: 3,
+		num: 211
+	},
+	"judoka": {
+                desc: "This Pokemon does 1.5x damage against opponents weighing 60 kg (132.3 lbs) or more.",
+                shortDesc: "50% damage bonus against targets weighing 60 kg (132.3 lbs) or more.",
+                onBasePower: function (basePower, attacker, defender, move) {
+			if (target.weightkg >= 60) {
+				return this.chainModify(1.5);
+			}
+		},
+                id: "judoka",
+                name: "Judoka",
+                rating: 3,
+                num: 212
+        },
+        
+      	
