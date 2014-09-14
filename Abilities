@@ -100,6 +100,11 @@ exports.BattleAbilities = {
 				return this.chain(defMod, 1.5);
 			}
 		},
+		onModifySpD: function (spdMod) {
+			if (this.isWeather('sunnyday')) {
+				return this.chain(spdMod, 1.5);
+			}
+		},
 		id: "pollenshield",
 		name: "Pollen Shield",
 		rating: 2,
@@ -439,35 +444,6 @@ exports.BattleAbilities = {
 		rating: 3,
 		num: 214
 	},
-        "pollenshield": {
-		desc: "If this Pokemon is active while Sunny Day is in effect, its Defense and Special Defense are boosted by 50%",
-		shortDesc: "If Sunny Day is active, this Pokemon's Defense and Special Defense are 1.5x.",
-		onModifyDef: function (defMod) {
-			if (this.isWeather('sunnyday')) {
-				return this.chain(defMod, 1.5);
-			}
-		},
-                onModifySpD: function (spdMod) {
-			if (this.isWeather('sunnyday')) {
-				return this.chain(spdMod, 1.5);
-			}
-		},
-		id: "pollenshield",
-		name: "Pollen Shield",
-		rating: 3,
-		num: 215
-	},
-        "pollinate": {
-		desc: "This Pokemon's powder moves have their priority increased by 1.",
-		shortDesc: "Gives priority to powder moves.",
-		onModifyPriority: function (priority, pokemon, target, move) {
-			if (move && move.isPowder) return priority + 1;
-		},
-		id: "pollinate",
-		name: "Pollinate",
-		rating: 4,
-		num: 216
-	},
         "propogate": {
                 desc: "When this Pokemon enters battle, it afflicts its opponent with Leech Seed.",
                 shortDesc: "Uses Leech Seed on switch-in.",        
@@ -509,7 +485,7 @@ exports.BattleAbilities = {
                 id: "propogate",
                 name: "Propogate",
                 rating: 3,
-                num: 217
+                num: 215
             },
 	"purify": {
 		desc: "This Pokemon is immune to all Poison-type attacks and Toxic Spikes and absorbs Toxic Spikes on its side of the field when it enters battle; additionally, its Grass-type attacks receive a 50% boost if a Poison-type move hits this Pokemon or if it absorbs Toxic Spikes. Multiple boosts do not occur if this Pokemon is hit with multiple Poison-type attacks or if it is hit with a Poison-type attack after absorbing Toxic Spikes.",
@@ -554,7 +530,7 @@ exports.BattleAbilities = {
 		id: "purify",
 		name: "Purify",
 		rating: 3,
-		num: 218
+		num: 216
 	},
 	"quickwitted": {
 		desc: "This Pokemon's Psychic-type moves have their priority increased by 1.",
@@ -565,7 +541,7 @@ exports.BattleAbilities = {
 		id: "quickwitted",
 		name: "Quick-Witted",
 		rating: 3.5,
-		num: 219
+		num: 217
 	},
         "roadblock": {
 		desc: "When this Pokemon enters the field, its opponents cannot switch or flee the battle unless they are part Flying-type, have the Levitate ability, are holding Shed Shell, or they use the moves Baton Pass or U-Turn. Flying-type and Levitate Pokemon cannot escape if they are holding Iron Ball or Gravity is in effect. Levitate Pokemon also cannot escape if their ability is disabled through other means, such as Skill Swap or Gastro Acid.",
@@ -583,7 +559,7 @@ exports.BattleAbilities = {
 		id: "roadblock",
 		name: "Road Block",
 		rating: 5,
-		num: 220
+		num: 218
 	},
         "levitate": { //update levitate's description to indicate immunity to road block
             inherit: true,
@@ -598,7 +574,7 @@ exports.BattleAbilities = {
 		id: "scarecrow",
 		name: "Scarecrow",
 		rating: 3,
-		num: 221
+		num: 219
 	},
         "sneaky": {
 		desc: "This Pokemon's Dark-type moves have their priority increased by 1.",
@@ -609,7 +585,7 @@ exports.BattleAbilities = {
 		id: "sneaky",
 		name: "Sneaky",
 		rating: 3,
-		num: 222
+		num: 220
 	},
         "sweetdreams": {
                 desc: "If this Pokemon is asleep at the end of a turn, it recovers 1/8 of its max HP.",
@@ -623,7 +599,7 @@ exports.BattleAbilities = {
                 id: "sweetdreams",
                 name: "Sweet Dreams",
                 rating: 3,
-                num: 223
+                num: 221
         },
         "swordsman": {
                 desc: "Boosts the power of Blade, Slash, Cut, and Sword moves by 50%",
@@ -637,7 +613,7 @@ exports.BattleAbilities = {
 		id: "swordsman",
 		name: "Swordsman",
 		rating: 3,
-		num: 224
+		num: 222
 	},
         "trickster": {
                 desc: "This Pokemon's status moves that lower a target's stats have their effect doubled.",
@@ -665,7 +641,7 @@ exports.BattleAbilities = {
                 id: "trickster",
                 name: "Trickster",
                 rating: 3,
-                num: 225
+                num: 223
         },
         "unadaptable": {
                 desc: "This Pokemon's non-STAB moves have their damage increased by 66%.",
@@ -678,7 +654,7 @@ exports.BattleAbilities = {
                 id: "unadaptable",
                 name: "Unadaptable",
                 rating: 3.5,
-                num: 226
+                num: 224
         }
         
       	
