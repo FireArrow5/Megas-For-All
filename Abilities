@@ -93,8 +93,8 @@ exports.BattleAbilities = {
 		num: 195
 	},
 	"pollenshield": {
-		desc: "If this Pokemon is active while Sunny Day is in effect, its Defense is increased by 50%",
-		shortDesc: "If Sunny Day is active, this Pokemon's Defense is increased by 50%.",
+		desc: "If this Pokemon is active while Sunny Day is in effect, its Defense and Special Defense are increased by 50%",
+		shortDesc: "If Sunny Day is active, this Pokemon's Defense and Special Defense are increased by 50%.",
 		onModifyDef: function (defMod) {
 			if (this.isWeather('sunnyday')) {
 				return this.chain(defMod, 1.5);
